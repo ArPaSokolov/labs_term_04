@@ -148,6 +148,7 @@ echo "\nДан массив numbers(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)";
 echo "\nНужно сложить $count первых элементов, чтобы сумма была больше 10";
 
 /** Functions */
+// func 1
 function printStringReturnNumber($string): int {
     echo "\n$string";
     return 100;
@@ -157,4 +158,10 @@ function printStringReturnNumber($string): int {
 $myNum = printStringReturnNumber("Печатаем строку");
 echo "\nmyNum = $myNum";
 
+// func 2
+function increaseEnthusiasm(string $str): string {
+    return $str . "!";
+}
 
+
+echo increaseEnthusiasm("\nРаботает");
