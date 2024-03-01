@@ -44,3 +44,14 @@ echo "\nВ среднем на изучение каждого языка у н�
 /** Degree */
 echo "\n";
 echo 8**2;
+
+/** Assignment operators */
+$my_num = 25;
+$answer = $my_num;
+$answer += 2;
+$answer *= 2;
+$answer -= 2;
+$answer /= 2;
+$answer -= $my_num;
+
+echo "\n$answer"; // output = 1
