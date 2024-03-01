@@ -224,8 +224,7 @@ digitSum(777);
 
 /** Arrays */
 // func 1
-function fillArray(string $str, int $number): array
-{
+function fillArray(string $str, int $number): array {
     $arr = [];
     for ($i = 1; $i <= $number; $i++) {
         $arr[$i] = str_repeat($str, $i);
@@ -242,8 +241,7 @@ $array =  [
     [4, 5],
     [6]
 ];
-function array2DSum(array $arr2D): int
-{
+function array2DSum(array $arr2D): int {
     $sum = 0;
     foreach ($arr2D as $arr1D) {
         foreach ($arr1D as $value) {
@@ -255,3 +253,24 @@ function array2DSum(array $arr2D): int
 
 
 echo "\nСумма элементов array([1, 2, 3],[4, 5],[6]) равна", array2DSum($array);
+
+// func 3
+echo "\n";
+function create2DArray(int $number): array {
+    $count = 1;
+    for ($i = 0; $count < $number; $i++) {
+        echo "[ ";
+        for ($j = 0; $j < 2; $j++) {
+            $array1D[$j] = $count;
+            $count += 1;
+            echo $array1D[$j], " ";
+        }
+        $array2D[$i] = $array1D;
+        echo "] ";
+    }
+
+    return $array2D;
+}
+
+echo "Массив: ";
+create2DArray(6);
