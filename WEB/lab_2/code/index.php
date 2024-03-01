@@ -233,4 +233,25 @@ function fillArray(string $str, int $number): array
     return $arr;
 }
 
-foreach (fillArray("x", 6) as $value) echo "\n$value";
+
+foreach (fillArray("x", 5) as $value) echo "\n$value";
+
+// func 2
+$array =  [
+    [1, 2, 3],
+    [4, 5],
+    [6]
+];
+function array2DSum(array $arr2D): int
+{
+    $sum = 0;
+    foreach ($arr2D as $arr1D) {
+        foreach ($arr1D as $value) {
+            $sum += $value;
+        }
+    }
+    return $sum;
+}
+
+
+echo "\nСумма элементов array([1, 2, 3],[4, 5],[6]) равна", array2DSum($array);
