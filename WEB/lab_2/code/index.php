@@ -202,3 +202,22 @@ function recursiveOutput($array) {
 
 echo "\nЭлементы массива, выведенные с помощью рекурсии: ";
 recursiveOutput($numbers);
+
+// func 6
+function digitSum(int $number): void {
+    if ($number < 9) {
+        echo "\nЧисло $number является однозначным числом";
+    }
+    else {
+        $string = strval($number);
+        $sum = 0;
+        for ($i = 0; $i < strlen($string); $i++) {
+            $sum += intval($string[$i]);
+        }
+        echo "\nСумма цифр в числе $number равна $sum";
+        digitSum($sum);
+    }
+}
+
+
+digitSum(777);
