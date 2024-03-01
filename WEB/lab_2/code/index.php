@@ -146,3 +146,15 @@ while ($sum<=10){
 
 echo "\nДан массив numbers(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)";
 echo "\nНужно сложить $count первых элементов, чтобы сумма была больше 10";
+
+/** Functions */
+function printStringReturnNumber($string): int {
+    echo "\n$string";
+    return 100;
+}
+
+
+$myNum = printStringReturnNumber("Печатаем строку");
+echo "\nmyNum = $myNum";
+
+
