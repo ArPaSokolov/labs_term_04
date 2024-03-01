@@ -32,3 +32,11 @@ echo "\n";
 echo $floatVariable;
 echo "\n$intVariable * $floatVariable"; // output = 12
 echo "\n$message";
+
+/** Multiplication and division */
+$num_languages = 4;
+$months = 11;
+$days = 16;
+$days_per_language = $months * $days / $num_languages;
+
+echo "\nВ среднем на изучение каждого языка у нее ушло: $days_per_language";
