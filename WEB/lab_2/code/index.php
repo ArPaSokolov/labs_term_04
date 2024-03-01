@@ -189,7 +189,7 @@ function  cut(string $string, int $number = 10): string {
 // func 5
 echo "\n", cut("Лохнесс", 3);
 
-function recursiveOutput($array) {
+function recursiveOutput(array $array) {
     if (is_array( $array ) &&count($array) > 0) {
         echo $array[0] . " ";
         // delete the first element and shift the array to the left
@@ -221,3 +221,16 @@ function digitSum(int $number): void {
 
 
 digitSum(777);
+
+/** Arrays */
+// func 1
+function fillArray(string $str, int $number): array
+{
+    $arr = [];
+    for ($i = 1; $i <= $number; $i++) {
+        $arr[$i] = str_repeat($str, $i);
+    }
+    return $arr;
+}
+
+foreach (fillArray("x", 6) as $value) echo "\n$value";
