@@ -175,3 +175,15 @@ function repeatThreeTimes(string $str): string {
 echo "\n", repeatThreeTimes("Работает");
 
 echo "\n", increaseEnthusiasm(repeatThreeTimes("Работает"));
+
+// func 4
+function  cut(string $string, int $number = 10): string {
+    if (strlen($string) > $number){ // checking for a fool
+        $newString = mb_substr($string, 0, $number, "UTF-8");
+        return $newString;
+    }
+    else
+        return $string;
+}
+
+echo "\n", cut("Лохнесс", 3);
