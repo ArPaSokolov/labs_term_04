@@ -186,4 +186,19 @@ function  cut(string $string, int $number = 10): string {
         return $string;
 }
 
+// func 5
 echo "\n", cut("Лохнесс", 3);
+
+function recursiveOutput($array) {
+    if (is_array( $array ) &&count($array) > 0) {
+        echo $array[0] . " ";
+        // delete the first element and shift the array to the left
+        array_shift($array);
+        // calling function itself
+        recursiveOutput($array);
+    }
+}
+
+
+echo "\nЭлементы массива, выведенные с помощью рекурсии: ";
+recursiveOutput($numbers);
