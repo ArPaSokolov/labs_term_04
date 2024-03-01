@@ -40,3 +40,7 @@ $days = 16;
 $days_per_language = $months * $days / $num_languages;
 
 echo "\nВ среднем на изучение каждого языка у нее ушло: $days_per_language";
+
+/** Degree */
+echo "\n";
+echo 8**2;
