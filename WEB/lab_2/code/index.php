@@ -165,3 +165,13 @@ function increaseEnthusiasm(string $str): string {
 
 
 echo increaseEnthusiasm("\nРаботает");
+
+// func 3
+function repeatThreeTimes(string $str): string {
+    return str_repeat($str, 3);
+}
+
+
+echo "\n", repeatThreeTimes("Работает");
+
+echo "\n", increaseEnthusiasm(repeatThreeTimes("Работает"));
