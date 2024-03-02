@@ -320,8 +320,6 @@ function checkEqual($num1, $num2): bool {
 
 $result = checkEqual(8,8);
 
-echo "\n";
-
 // Other
 $test = 7;
 if ($test == 0) echo 'верно'; // shortened version
@@ -346,3 +344,16 @@ if (count($arr) == 3) {
     $sum = array_sum($arr);
     echo "\nСумма элементов массива: $sum";
 }
+
+/** Cycles */
+function triangle(int $number): void {
+    $str = "";
+    for ($i = 1; $i <= $number; $i++) {
+        $str .= "X";
+        echo "\n", $str;
+    }
+}
+
+
+triangle( 20);
+
