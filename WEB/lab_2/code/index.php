@@ -293,3 +293,56 @@ echo "\nДан массив ['a', 'b', 'c', 'd', 'e']";
 echo "\nКоличество элементов в массиве: ", count($arr);
 echo "\nПоследний элемент в массиве: ", end($arr);
 echo "\nПредпоследний элемент в массиве: ", $arr[count($arr)-2];
+
+/** if else */
+// func 1
+function checkSum($num1, $num2): bool {
+    $sum = $num1 + $num2;
+    if ($sum > 10) {
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
+$result = checkSum(2,3);
+
+// func 2
+function checkEqual($num1, $num2): bool {
+    if ($num1 == $num2) {
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
+$result = checkEqual(8,8);
+
+echo "\n";
+
+// Other
+$test = 7;
+if ($test == 0) echo 'верно'; // shortened version
+
+
+$age = 42;
+
+if ($age < 10 || $age > 99) {
+    echo "\nЧисло $age не попадает в указанный диапазон";
+}
+else {
+    $digitSum = array_sum(str_split($age));
+    if ($digitSum <= 9) {
+        echo "\nСумма цифр в числе $age однозначна и равна $digitSum";
+    } else {
+        echo "\nСумма цифр в числе $age двузначна и равна $digitSum";
+    }
+}
+
+$arr = [1, 2, 3];
+if (count($arr) == 3) {
+    $sum = array_sum($arr);
+    echo "\nСумма элементов массива: $sum";
+}
