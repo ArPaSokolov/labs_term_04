@@ -357,3 +357,36 @@ function triangle(int $number): void {
 
 triangle( 20);
 
+/** Combination of functions */
+// task 1
+$array = [1, 2, 3, 4, 5];
+$average = array_sum($array) / count($array);
+
+echo "\nСреднее арифметическое элементов массива [1, 2, 3, 4, 5]: $average";
+
+// task 2
+$number = 100;
+$sum = ($number * ($number + 1)) / 2; // arithmetic progression formula
+
+echo "\nСумма чисел от 1 до 100: " . $sum;
+
+// task 3
+$arr = [4, 9, 16, 25, 36];
+$result = array_map('sqrt', $arr);
+
+echo "\nДан массив [4, 9, 16, 25, 36], массив с квадратными корнями этих чисел: \n[ ";
+foreach($result as $value) echo "$value "; // Выводим результат на экран
+echo "]";
+
+// task 4
+$letters = range('a', 'z');
+$numbers = range(1, 26);
+$result = array_combine($letters, $numbers);
+
+foreach ($result as $letters => $numbers) echo "\nБуква '$letters' имеет номер: '$numbers'";
+
+// task 5
+$string = '1234567890';
+$numbers = str_split($string, 2); // dividing the string into pairs of numbers
+
+echo "\nСумма пар чисел в числе 1234567890 равна ", array_sum($numbers);
