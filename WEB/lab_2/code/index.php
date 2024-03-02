@@ -355,7 +355,7 @@ function triangle(int $number): void {
 }
 
 
-triangle( 20);
+triangle(20);
 
 /** Combination of functions */
 // task 1
@@ -390,3 +390,4 @@ $string = '1234567890';
 $numbers = str_split($string, 2); // dividing the string into pairs of numbers
 
 echo "\nСумма пар чисел в числе 1234567890 равна ", array_sum($numbers);
+echo "\n";
