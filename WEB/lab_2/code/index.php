@@ -30,7 +30,7 @@ message;
 echo "\n$intVariable";
 echo "\n";
 echo $floatVariable;
-echo "\n$intVariable * $floatVariable"; // output = 12
+echo "\n", $intVariable * $floatVariable; // output = 12
 echo "\n$message";
 
 /** Multiplication and division */
