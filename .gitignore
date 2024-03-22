@@ -5,6 +5,12 @@
 
 *.sql
 
+
 # ASD
 
 *.docx
+
+
+# WEB
+
+help.txt
