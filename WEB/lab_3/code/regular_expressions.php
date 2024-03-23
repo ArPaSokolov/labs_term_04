@@ -1,3 +1,4 @@
+<title>Regular expressions</title>
 <h1>Regular expressions</h1>
 <h2>Task 1</h2>
 <?php
