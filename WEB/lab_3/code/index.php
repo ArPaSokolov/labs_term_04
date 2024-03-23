@@ -20,5 +20,21 @@
         echo $match."<br>";
     }
     ?>
+
+    <h2>Task 2</h2>
+    <?php
+    // Task 2
+    function cubing($matches): string // возводим в куб
+    {
+        return $matches[0] ** 3;
+    }
+
+    $pattern = '/(\d+)/'; // регулярка
+    $string = 'a1b2c3d4e5';
+
+    $stringWithCubes = preg_replace_callback($pattern, 'cubing', $string);
+
+    echo "Новая строка с кубами:<br>" . $stringWithCubes . "<br>";
+    ?>
 </body>
 </html>
