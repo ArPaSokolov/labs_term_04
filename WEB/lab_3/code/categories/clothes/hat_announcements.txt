@@ -1,0 +1,4 @@
+Email: ArPaSokolov@stud.kantiana.ru
+Title: hat
+Category: clothes
+Description: an old hat
