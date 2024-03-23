@@ -56,13 +56,13 @@ if ('POST' === $_SERVER['REQUEST_METHOD']) {
         <h2>Task 2</h2>
 
         <label>Surname:</label>
-        <input type="text" name="surname" value="<?php echo $userData['surname'] ?? '*'; ?>" required><br>
+        <input type="text" name="surname" value="<?php echo $userData['surname'] ?? ''; ?>" required><br>
 
         <label>Name:</label>
-        <input type="text" name="name" value="<?php echo $userData['name'] ?? '*'; ?>" required><br>
+        <input type="text" name="name" value="<?php echo $userData['name'] ?? ''; ?>" required><br>
 
         <label>Age:</label>
-        <input type="text" name="age" value="<?php echo $userData['age'] ?? '*'; ?>" required><br>
+        <input type="text" name="age" value="<?php echo $userData['age'] ?? ''; ?>" required><br>
 
     <h2>Task 3</h2>
 
