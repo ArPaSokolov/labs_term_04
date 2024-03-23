@@ -1,10 +1,11 @@
 <?php
 session_start();
 
-// Получение сохраненных данных из сессии
-$surname = $_SESSION['surname'] ?? '';
-$name = $_SESSION['name'] ?? 'Unknown';
-$age = $_SESSION['age'] ?? '';
+// получение сохраненных данных из сессии
+$userData = $_SESSION['userdata'] ?? [];
+$surname = $userData['surname'] ?? '';
+$name = $userData['name'] ?? 'Unknown';
+$age = $userData['age'] ?? '';
 ?>
 
 <!doctype html>
@@ -17,8 +18,17 @@ $age = $_SESSION['age'] ?? '';
     <title>lab_3</title>
 </head>
 <body>
-    <p><?php echo "$surname $name $age"; ?></p>
-
+    <h2>User Data:</h2>
+    <ul>
+        <?php
+        foreach ($userData as $key => $value) {
+            if (null != $value) {
+                echo "<li>$key: $value</li>";
+            }
+        }
+        if(empty($userData)) echo "Unknown";
+        ?>
+    </ul>
     <h1>Сontents:</h1>
 
     <a href="regular_expressions.php"><h2>Regular expressions</h2></a>
