@@ -8,6 +8,17 @@
     <title>lab_3</title>
 </head>
 <body>
+    <h1>Regular expressions</h1>
+    <h2>Task 1</h2>
+    <?php
+    $pattern = '/a..b/'; // регулярка
+    $text = 'ahb acb aeb aeeb bdha aj ab adcb axeb acctb';
 
+    preg_match_all($pattern, $text, $matches);
+    echo "Строки подошедшие под шаблон:<br>";
+    foreach ($matches[0] as $match) {
+        echo $match."<br>";
+    }
+    ?>
 </body>
 </html>
