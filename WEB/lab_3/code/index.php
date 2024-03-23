@@ -18,6 +18,7 @@ $age = $userData['age'] ?? '';
     <title>lab_3</title>
 </head>
 <body>
+<!-- Session. Task 3 -->
     <h2>User Data:</h2>
     <ul>
         <?php
@@ -29,6 +30,7 @@ $age = $userData['age'] ?? '';
         if(empty($userData)) echo "Unknown";
         ?>
     </ul>
+<!-- Session. Task 3 -->
     <h1>Сontents:</h1>
 
     <a href="regular_expressions.php"><h2>Regular expressions</h2></a>
