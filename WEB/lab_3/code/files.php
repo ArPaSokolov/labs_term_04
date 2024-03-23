@@ -22,14 +22,13 @@
             <option value="clothes">Clothes</option>
             <option value="electronics">Electronics</option>
             <option value="services">Services</option>
-        </select>
+        </select><br>
+
+        <label for="description">Description:</label><br>
+        <textarea name="text" rows="10" cols="54" required></textarea><br>
+
+        <button type="submit">Post</button>
     </form>
-
-    <label for="description">Description:</label><br>
-    <textarea name="text" rows="10" cols="54" required></textarea><br>
-
-    <button type="submit">Post</button>
-
     <div id="form"…>
     <div id="table">
         <table>
