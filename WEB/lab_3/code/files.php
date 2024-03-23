@@ -19,7 +19,7 @@
 
         <label for="categories">Categories</label>
         <select name="categories" required>
-            <option value="clothes">Clothes</option> <!-- -->
+            <option value="clothes">Clothes</option>
             <option value="electronics">Electronics</option>
             <option value="services">Services</option>
         </select>
@@ -29,5 +29,21 @@
     <textarea name="text" rows="10" cols="54" required></textarea><br>
 
     <button type="submit">Post</button>
+
+    <div id="form"…>
+    <div id="table">
+        <table>
+            <thead>
+                <th>Email</th>
+                <th>Title</th>
+                <th>Category</th>
+                <th>Description</th>
+            </thead>
+            <tbody>
+                <tr>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </body>
 </html>
