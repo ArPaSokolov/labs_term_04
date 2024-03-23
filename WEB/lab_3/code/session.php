@@ -50,35 +50,35 @@ if ('POST' === $_SERVER['REQUEST_METHOD']) {
     </style>
 </head>
 <body>
-<h1>Session</h1>
+    <h1>Session</h1>
 
-<form method="post" action="<?php echo $_SERVER['PHP_SELF']?>">
-    <h2>Task 2</h2>
+    <form method="post" action="<?php echo $_SERVER['PHP_SELF']?>">
+        <h2>Task 2</h2>
 
-    <label>Surname:</label>
-    <input type="text" name="surname" value="<?php echo $userData['surname'] ?? '*'; ?>" required><br>
+        <label>Surname:</label>
+        <input type="text" name="surname" value="<?php echo $userData['surname'] ?? '*'; ?>" required><br>
 
-    <label>Name:</label>
-    <input type="text" name="name" value="<?php echo $userData['name'] ?? '*'; ?>" required><br>
+        <label>Name:</label>
+        <input type="text" name="name" value="<?php echo $userData['name'] ?? '*'; ?>" required><br>
 
-    <label>Age:</label>
-    <input type="text" name="age" value="<?php echo $userData['age'] ?? '*'; ?>" required><br>
+        <label>Age:</label>
+        <input type="text" name="age" value="<?php echo $userData['age'] ?? '*'; ?>" required><br>
 
-<h2>Task 3</h2>
+    <h2>Task 3</h2>
 
-    <label>Sex:</label>
-    <input type="text" name="sex" value="<?php echo $userData['sex'] ?? ''; ?>"><br>
+        <label>Sex:</label>
+        <input type="text" name="sex" value="<?php echo $userData['sex'] ?? ''; ?>"><br>
 
-    <label>Salary:</label>
-    <input type="text" name="salary" value="<?php echo $userData['salary'] ?? ''; ?>"><br>
+        <label>Salary:</label>
+        <input type="text" name="salary" value="<?php echo $userData['salary'] ?? ''; ?>"><br>
 
-    <button type="submit">Save</button>
-</form><br>
+        <button type="submit">Save</button>
+    </form><br>
 
-<form action="logout.php" method="post">
-    <button type="submit" name="logout">Delete profile</button>
-</form>
+    <form action="logout.php" method="post">
+        <button type="submit" name="logout">Delete profile</button>
+    </form>
 
-<a href="index.php"><h2>Back</h2></a>
+    <a href="index.php"><h2>Back</h2></a>
 </body>
 </html>
