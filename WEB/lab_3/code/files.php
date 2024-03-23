@@ -29,20 +29,46 @@
 
         <button type="submit">Post</button>
     </form>
-    <div id="form"…>
     <div id="table">
         <table>
             <thead>
+            <tr>
                 <th>Email</th>
                 <th>Title</th>
                 <th>Category</th>
                 <th>Description</th>
+            </tr>
             </thead>
             <tbody>
-                <tr>
-                </tr>
+            <?php
+            $categories = ["clothes", "electronics", "services"];
+            foreach ($categories as $category) {
+                $dir = "/code/categories/$category"; // путь к директории с файлами
+                $fileNames = scandir($dir, SCANDIR_SORT_ASCENDING); // получение списка файлов в директории
+                foreach ($fileNames as $fileName) {
+                    if ($fileName !== '.' && $fileName !== '..') {
+                        echo '<tr>';
+                        $filePath = $dir . "/" . $fileName; // полный путь к файлу
+
+                        $file = fopen($filePath, "r"); // открыть файл для чтения данных
+                        if ($file) {
+                            $fileData = file($filePath);
+
+                            foreach ($fileData as $data) {
+                                // разделить строку на отдельные значения
+                                $values = explode(":", $data);
+                                echo "<td>" . $values[1] . "</td>";
+                            }
+                            fclose($file); // закрыть файл
+                        }
+                        echo '</tr>';
+                    }
+                }
+            }
+            ?>
             </tbody>
         </table>
     </div>
+    <a href="index.php"><h2>Back</h2></a>
 </body>
 </html>
