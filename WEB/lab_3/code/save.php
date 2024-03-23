@@ -13,8 +13,10 @@ if ('POST' === $_SERVER['REQUEST_METHOD']) {
         $data = "Email: $email\nTitle: $title\nCategory: $category\nDescription: $description\n";
 
         $f = fopen($fileName, "w"); // открываем файл, в случае отсутствия - создаем
+        if ($f) {
         fwrite($f, $data); // запись в файл
         fclose($f); // закрываем файл
+        }
     }
 }
 
