@@ -38,5 +38,7 @@ $age = $userData['age'] ?? '';
     <a href="form.php"><h2>Form</h2></a>
 
     <a href="session.php"><h2>Session</h2></a>
+
+    <a href="files.php"><h2>Files</h2></a>
 </body>
 </html>
