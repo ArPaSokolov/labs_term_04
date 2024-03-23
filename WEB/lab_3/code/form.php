@@ -1,4 +1,5 @@
-<h1>Forms</h1>
+<title>Form</title>
+<h1>Form</h1>
 <h2>Task 1</h2>
 
 <?php
