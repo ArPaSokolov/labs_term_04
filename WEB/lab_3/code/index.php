@@ -11,5 +11,7 @@
     <h1>Сontents:</h1>
 
     <a href="regular_expressions.php"><h2>Regular expressions</h2></a>
+
+    <a href="form.php"><h2>Form</h2></a>
 </body>
 </html>
