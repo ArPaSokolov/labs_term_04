@@ -3,11 +3,11 @@
 <h2>Task 1</h2>
 
 <?php
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+if ('POST' === $_SERVER['REQUEST_METHOD']) {
     if (isset($_POST['text'])) {
         $text = $_POST['text'];
 
-        // Подсчет количества слов и символов
+        // подсчет количества слов и символов
         $wordCount = 0;
         if (!empty($text)) {
             $words = preg_split('/\s+/', $text);
@@ -15,7 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         $charCount = mb_strlen($text, "utf-8");
 
-        // Вывод результатов
+        // вывод результатов
         echo "Количество слов: $wordCount<br>";
         echo "Количество символов: $charCount";
     }
