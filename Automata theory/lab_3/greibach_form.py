@@ -3,10 +3,10 @@ import random
 # Грамматика в виде словаря, где ключи - нетерминальные символы, значения - списки строк-правил
 grammar = {
     'A1': ['-A3'],
-    'A3': ['1A6A5', '2A6A5', '0A6A5', '1A3A5', '2A3A5'],
-    'A8': ['1', '2'],
-    'A6': ['/'],
-    'A5': ['1', '2', '0']
+    'A3': ['1A7A5', '2A7A5', '0A7A5', '1A3A6', '2A3A6'],
+    'A5': ['1', '2'],
+    'A7': ['/'],
+    'A6': ['1', '2', '0']
 }
 
 
@@ -35,6 +35,6 @@ def generate_string(start_symbol):
     return string
 
 
-for _ in range(10):
+for _ in range(5):
     random_string = generate_string('A1')
     print(random_string)
