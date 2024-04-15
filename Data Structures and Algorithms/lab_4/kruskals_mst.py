@@ -1,72 +1,72 @@
-def read_adjacency_matrix(file_path):
-    with open(file_path, 'r') as f:
-        lines = f.readlines()
-        matrix = []
-        for line in lines:
-            row = [int(x) for x in line.split()]
-            matrix.append(row)
-    return matrix
-
-
 def convert_to_edges(matrix):
-    V = len(matrix)  # количество вершин графа
-    E = []  # список ребер графа (длина, вершина 1, вершина 2)
-    for i in range(V):
-        for j in range(i + 1, V):  # пропускаем диагональ и нижнюю половину матрицы
+    num_vertices = len(matrix)  # количество вершин графа
+    edges = []  # список ребер графа (длина, вершина 1, вершина 2)
+    for i in range(num_vertices):
+        for j in range(i + 1, num_vertices):  # пропускаем диагональ и нижнюю половину матрицы
             if matrix[i][j] > 0:  # если есть ребро между вершинами i и j
-                E.append((matrix[i][j], i + 1, j + 1))  # добавляем ребро в список
-    return E
+                edges.append((matrix[i][j], i + 1, j + 1))  # добавляем ребро в список
+    return edges
 
 
-def convert_to_matrix(E):
-    V = max(max(e[1], e[2]) for e in E)  # количество вершин графа
-    M = [[0 for i in range(V)] for j in range(V)]  # матрица смежности графа
+def convert_to_matrix(edges):
+    num_vertices = max(max(e[1], e[2]) for e in edges)  # количество вершин графа
+    adjacency_matrix = [[0 for i in range(num_vertices)] for j in range(num_vertices)]  # матрица смежности графа
 
-    for e in E:
+    for edge in edges:
         # для каждого ребра в списке
-        i = e[1] - 1  # начало ребра
-        j = e[2] - 1  # конец ребра
-        w = e[0]  # длина ребра
-        M[i][j] = w  # заполняем матрицу смежности
-    return M
+        vertex1 = edge[1] - 1  # начало ребра
+        vertex2 = edge[2] - 1  # конец ребра
+        weight = edge[0]  # длина ребра
+        adjacency_matrix[vertex1][vertex2] = weight  # заполняем матрицу смежности
+    return adjacency_matrix
 
 
-def kraskal(R):
-    Rs = sorted(R, key=lambda x: x[0])
-    U = set()  # список соединенных вершин
-    D = {}  # словарь списка изолированных групп вершин
-    T = []  # список ребер остова
+def kruskal(edges):
+    sorted_edges = sorted(edges, key=lambda x: x[0])
+    connected_vertices = set()  # список соединенных вершин
+    disjoint_sets = {}  # словарь списка изолированных групп вершин
+    minimum_spanning_tree = []  # список ребер остова
 
-    for r in Rs:
-        if r[1] not in U or r[2] not in U:  # проверка для исключения циклов в остове
-            if r[1] not in U and r[2] not in U:  # если обе вершины не соединены, то
-                D[r[1]] = [r[1], r[2]]  # формируем в словаре ключ с номерами вершин
-                D[r[2]] = D[r[1]]  # и связываем их с одним и тем же списком вершин
-            else:  # иначе
-                if not D.get(r[1]):  # если в словаре нет первой вершины, то
-                    D[r[2]].append(r[1])  # добавляем в список первую вершину
-                    D[r[1]] = D[r[2]]  # и добавляем ключ с номером первой вершины
+    for edge in sorted_edges:
+        if edge[1] not in connected_vertices or edge[2] not in connected_vertices:
+            if edge[1] not in connected_vertices and edge[2] not in connected_vertices:
+                disjoint_sets[edge[1]] = [edge[1], edge[2]]  # формируем в словаре ключ с номерами вершин
+                disjoint_sets[edge[2]] = disjoint_sets[edge[1]]  # и связываем их с одним и тем же списком вершин
+            else:
+                if not disjoint_sets.get(edge[1]):
+                    disjoint_sets[edge[2]].append(edge[1])
+                    disjoint_sets[edge[1]] = disjoint_sets[edge[2]]
                 else:
-                    D[r[1]].append(r[2])  # иначе, все то же самое делаем со второй вершиной
-                    D[r[2]] = D[r[1]]
+                    disjoint_sets[edge[1]].append(edge[2])
+                    disjoint_sets[edge[2]] = disjoint_sets[edge[1]]
 
-            T.append(r)  # добавляем ребро в остов
-            U.add(r[1])  # добавляем вершины в множество U
-            U.add(r[2])
+            minimum_spanning_tree.append(edge)  # добавляем ребро в остов
+            connected_vertices.add(edge[1])  # добавляем вершины в множество connected_vertices
+            connected_vertices.add(edge[2])
 
-    for r in Rs:  # проходим по ребрам второй раз и объединяем разрозненные группы вершин
-        if r[2] not in D[r[1]]:  # если вершины принадлежат разным группам, то объединяем
-            T.append(r)  # добавляем ребро в остов
-            gr1 = D[r[1]]
-            D[r[1]] += D[r[2]]  # объединем списки двух групп вершин
-            D[r[2]] += gr1
-    return T
+    for edge in sorted_edges:
+        if edge[2] not in disjoint_sets[edge[1]]:  # если вершины принадлежат разным группам, то объединяем
+            minimum_spanning_tree.append(edge)  # добавляем ребро в остов
+            group1 = disjoint_sets[edge[1]]
+            disjoint_sets[edge[1]] += disjoint_sets[edge[2]]  # объединяем списки двух групп вершин
+            disjoint_sets[edge[2]] += group1
+    return minimum_spanning_tree
 
 
-if __name__ == '__main__':
-    input_file = 'input.txt'
-    # E = [(13, 1, 2), (18, 1, 3), (17, 1, 4), (14, 1, 5), (22, 1, 6), (26, 2, 3), (22, 2, 5), (3, 3, 4), (19, 4, 6)]
-    adjacency_matrix = read_adjacency_matrix(input_file)
-    R = convert_to_edges(adjacency_matrix)
-    with open('output.txt', 'w') as f:
-        f.write('Минимальное остовное дерево: ' + str(kraskal(R)))
+def read_graph_from_file():
+    with open('../graphs_examples/input.txt', 'r') as file:
+        lines = file.readlines()
+        adjacency_matrix = [[int(x) for x in line.strip().split()[1:]] for line in lines[1:]]
+    return adjacency_matrix
+
+
+def write_tree_to_file(tree):
+    with open('../graphs_examples/output.txt', 'w') as file:
+        file.write('Минимальное остовное дерево: ' + str(tree))
+
+
+adjacency_matrix = read_graph_from_file()
+edges = convert_to_edges(adjacency_matrix)
+minimum_spanning_tree = kruskal(edges)
+
+write_tree_to_file(minimum_spanning_tree)
