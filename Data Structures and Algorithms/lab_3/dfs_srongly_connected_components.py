@@ -22,10 +22,10 @@ def dfs(graph, vertex, visited, stack):
     for adj_vertex in graph[vertex]:
         if not visited[adj_vertex]:
             dfs(graph, adj_vertex, visited, stack)  # рекурсивно обходим все смежные вершины текущей вершины
-    stack.append(vertex)
+    stack.append(vertex) # заполняем стек вершинами, которые доступны для посещения
 
 
-def get_transpose(graph): # транспонируем исходный графа
+def get_transpose(graph): # транспонируем исходный графа, для обратного обхода и поиска сильно связанных компонентов
     num_vertices = len(graph)
     transpose = [[] for _ in range(num_vertices)]
     for vertex in range(num_vertices):
