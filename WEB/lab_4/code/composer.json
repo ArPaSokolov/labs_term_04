@@ -1,0 +1,13 @@
+{
+    "name": "sesha/code",
+    "authors": [
+        {
+            "name": "sesha",
+            "email": "sesha-24@bulletin-board-24.iam.gserviceaccount.com"
+        }
+    ],
+    "require": {
+        "google/apiclient": "^2.15",
+        "asimlqt/php-google-spreadsheet-client": "^3.0"
+    }
+}
