@@ -1,0 +1,12 @@
+{
+    "name": "sesha/lab_4",
+    "authors": [
+        {
+            "name": "sesa",
+            "email": "arpasokolov@bulletin-board-24.iam.gserviceaccount.com"
+        }
+    ],
+    "require": {
+        "google/apiclient": "*"
+    }
+}
