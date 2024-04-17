@@ -10,7 +10,7 @@
 <body>
 <h1>The Bulletin Board</h1>
 
-<form action="save.php"">
+<form action="save.php" method="POST">
     <label for="email">Email</label>
     <input type="email" name="email" required>
 
@@ -27,7 +27,7 @@
     <label for="description">Description:</label><br>
     <textarea name="text" rows="10" cols="54" required></textarea><br>
 
-<button type="submit">Post</button>
+    <button type="submit">Post</button>
 </form>
 </body>
 </html>
