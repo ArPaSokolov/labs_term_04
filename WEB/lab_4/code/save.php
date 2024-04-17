@@ -1,36 +1,42 @@
 <?php
-require_once __DIR__ . '/vendor/autoload.php'; // Подключаем Google API Client Library
-
-use Google\Spreadsheet\DefaultServiceRequest;
-use Google\Spreadsheet\ServiceRequestFactory;
-
-putenv('GOOGLE_APPLICATION_CREDENTIALS=' . __DIR__ . '/credentials.json');
-$client = new Google_Client();
+require __DIR__ . '/vendor/autoload.php'; // Подключаем Google API Client Library
 
 try {
-    $client->useApplicationDefaultCredentials();
+    // Конфигурируем Google Client
+    $client = new \Google_Client();
     $client->setApplicationName('The Bulletin Board');
+    $client->setScopes(['https://www.googleapis.com/auth/spreadsheets']);
+    $client->setAccessType('offline');
+    $path = __DIR__ . '/credentials.json';
+    $client->setAuthConfig($path);
 
-    $accessToken = $client->fetchAccessTokenWithAssertion()["access_token"];
-    ServiceRequestFactory::setInstance(new DefaultServiceRequest($accessToken));
+    // Конфигурируем Sheets Service
+    $service = new Google\Service\Sheets($client);
 
-    // Получаем нашу таблицу
-    $spreadsheet = (new Google\Spreadsheet\SpreadsheetService)
-        ->getSpreadsheetFeed()
-        ->getByTitle('The Bulletin Board');
+    // Идентификатор таблицы
+    $spreadsheetId = '1jnexgBDAHJq3gzLwzfbyHRkSLQa2EyOMPogOjvwYk9M';
 
-    // Получаем первый лист (вкладку)
-    $worksheets = $spreadsheet->getWorksheetFeed()->getEntries();
-    $worksheet = $worksheets[0];
+    // Указываем диапазон ячеек (в данном случае, первая ячейка A1)
+    $range = 'Sheet1!A1';
 
-    // Вписываем значение "OK" в первую ячейку
-    $cellFeed = $worksheet->getCellFeed();
-    $cellFeed->editCell(1, 1, 'OK');
+    // Создаем тело запроса для записи значения "OK"
+    $body = new Google\Service\Sheets\ValueRange([
+        'values' => [['OK']]
+    ]);
+
+    // Устанавливаем параметры записи (здесь можно указать дополнительные настройки)
+    $params = [
+        'valueInputOption' => 'RAW'
+    ];
+
+    // Выполняем запись данных
+    $result = $service->spreadsheets_values->update($spreadsheetId, $range, $body, $params);
 
 } catch (Exception $e) {
     echo $e->getMessage() . ' save.php' . $e->getLine() . ' ' . $e->getFile() . ' ' . $e->getCode();
 }
 
-// возвращает на страницу с объявлениями
+// Возвращаемся на страницу с объявлениями
 header('Location: board.php');
 exit();
+?>
