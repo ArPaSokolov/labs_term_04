@@ -1,85 +1,63 @@
-class EarleyItem:
-    def __init__(self, rule, dot, start, end):
-        self.rule = rule
-        self.dot = dot
-        self.start = start
-        self.end = end
+def earley_parse(grammar, input_string):
+    chart = [[] for _ in range(len(input_string) + 1)]
+    start_rule = ('S', ('+', 'a', 'N'), 0, 0)
+    chart[0].append(start_rule)
 
+    for i in range(len(chart)):
+        for item in chart[i]:
+            symbol_after_dot = get_symbol_after_dot(item)
 
-def earley_parse(grammar, string):
-    n = len(string)
-    chart = [[] for _ in range(n + 1)]
+            if symbol_after_dot is not None and symbol_after_dot in grammar:
+                # Predict
+                for production in grammar[symbol_after_dot]:
+                    new_item = (symbol_after_dot, production, 0, i)
+                    if new_item not in chart[i]:
+                        chart[i].append(new_item)
 
-    # Инициализируем начальное состояние
-    start_rule = list(grammar.keys())[0]
-    start_item = EarleyItem(start_rule, 0, 0, 0)
-    chart[0].append(start_item)
+            elif symbol_after_dot is not None:
+                # Scan
+                if i < len(input_string) and symbol_after_dot == input_string[i]:
+                    new_item = (item[0], item[1], item[2] + 1, item[3])
+                    if new_item not in chart[i + 1]:
+                        chart[i + 1].append(new_item)
 
-    for i in range(n + 1):
-        added = True
-        while added:
-            added = False
-            for item in chart[i]:
-                if item.dot < len(item.rule):
-                    next_symbol = item.rule[item.dot]
-                    if next_symbol in grammar:
-                        # Прогнозирование
-                        predict(grammar, next_symbol, i, chart)
-                    else:
-                        # Сканирование
-                        scan(item, next_symbol, i, chart, string)
-                else:
-                    # Завершение элемента
-                    complete(item, i, chart)
-                    added = True
+            else:
+                # Complete
+                for prev_item in chart[item[3]]:
+                    if prev_item[2] < len(prev_item[1]) and prev_item[1][prev_item[2]] == item[0]:
+                        new_item = (prev_item[0], prev_item[1], prev_item[2] + 1, prev_item[3])
+                        if new_item not in chart[i]:
+                            chart[i].append(new_item)
 
     return chart
 
 
-def predict(grammar, symbol, position, chart):
-    for rule in grammar[symbol]:
-        item = EarleyItem(rule, 0, position, position)
-        if item not in chart[position]:
-            chart[position].append(item)
+def get_symbol_after_dot(item):
+    if item[2] < len(item[1]):
+        return item[1][item[2]]
+    else:
+        return None
 
 
-def scan(item, symbol, position, chart, string):
-    if position < len(string) and symbol == string[position]:
-        new_item = EarleyItem(item.rule, item.dot + 1, item.start, position + 1)
-        if new_item not in chart[position + 1]:
-            chart[position + 1].append(new_item)
-
-
-def complete(item, position, chart):
-    for prev_item in chart[item.start]:
-        if prev_item.dot < len(prev_item.rule) and prev_item.rule[prev_item.dot] == item.rule[0]:
-            new_item = EarleyItem(prev_item.rule, prev_item.dot + 1, prev_item.start, position)
-            if new_item not in chart[position]:
-                chart[position].append(new_item)
-
-
-# Пример грамматики
+# Пример использования:
 grammar = {
-    'S': {'FN'},
-    'N': {'GC'},
-    'G': {'BD'},
-    'D': {'GC', 'BC'},
-    'F': {'TA'},
-    'T': {'+'},
-    'A': {'a'},
-    'B': {'b'},
-    'C': {'c'}
+    'S': {('+', 'a', 'N')},
+    'N': {('b', 'D', 'c')},
+    'D': {('b', 'D', 'c'), ('b', 'c')}
 }
 
-# Пример строки
-string = ['+abbbbcccc']
+input_string = '+a' + 'b' * 4 + 'c'
+chart = earley_parse(grammar, input_string)
 
-# Разбор методом Эрли
-chart = earley_parse(grammar, string)
-
-# Вывод разбора
-for i, items in enumerate(chart):
-    print(f'Chart[{i}]:')
-    for item in items:
-        print(f'{item.rule: <10} ({item.dot}) [{item.start}:{item.end}]')
-    print()
+# Вывод таблицы разбора по столбцам
+for i, column in enumerate(chart):
+    if column:
+        if i > 0:
+            print(f"======= {input_string[i - 1]} =======")  # Вывод символа из входной строки
+        print()
+        for j, item in enumerate(column):
+            production = ' '.join(item[1])
+            dot_position = item[2]
+            rule = f"{item[0]} -> {' '.join(item[1][:dot_position])} • {' '.join(item[1][dot_position:])}"
+            print(f"{rule}, {item[3]}")  # Вывод правила и номера шага
+        print()

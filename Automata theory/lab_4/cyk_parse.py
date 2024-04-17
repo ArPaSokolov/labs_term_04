@@ -1,41 +1,91 @@
-def cyk_parse(grammar, string):
-    n = len(string)
-    table = [[set() for _ in range(n+1)] for _ in range(n+1)]
+from tabulate import tabulate
 
-    # Заполняем таблицу для подстрок длины 1
-    for i in range(1, n+1):
-        for rule in grammar:
-            if string[i-1] in grammar[rule]:
-                table[i][i].add(rule)
+class CYK:
+    def __init__(self, grammar, startstate):
+        self.grammar = grammar
+        self.startstate = startstate
 
-    # Заполняем таблицу для подстрок большей длины
-    for length in range(2, n + 1):
-        for i in range(1, n - length + 2):
-            j = i + length - 1
-            for k in range(i, j):
-                for rule in grammar:
-                    for r1 in table[i][k]:
-                        for r2 in table[k + 1][j]:
-                            if r1 + r2 in grammar[rule]:
-                                table[i][j].add(rule)
+    def __getValidCombinations(self, left_collection_set, right_collection_set):
+        valid_combinations = []
+        # Проверяем все возможные комбинации левых и правых элементов
+        for num_collection, left_collection in enumerate(left_collection_set):
+            right_collection = right_collection_set[num_collection]
+            for left_item in left_collection:
+                for right_item in right_collection:
+                    combination = left_item + right_item
+                    # Проверяем, является ли комбинация допустимой согласно грамматике
+                    for key, value in self.grammar.items():
+                        if combination in value:
+                            if not key in valid_combinations:
+                                valid_combinations.append(key)
+        return valid_combinations
 
-    return table
+    def __getCollectionSets(self, full_table, x_position, x_offset):
+        table_segment = []
+        y_position = 0
+        # Формируем сегменты таблицы для проверки комбинаций
+        while x_offset >= 2:
+            item_set = full_table[y_position][x_position:x_position + x_offset]
+            if x_offset > len(item_set):
+                return None
+            table_segment.append(item_set)
+            x_offset -= 1
+            y_position += 1
+        vertical_combinations = []
+        horizontal_combinations = []
+        # Формируем вертикальные и горизонтальные комбинации
+        for item in table_segment:
+            vertical_combinations.append(item[0])
+            horizontal_combinations.append(item[-1])
+        return vertical_combinations[::-1], horizontal_combinations
 
-def print_table(table):
-    n = len(table) - 1
-    max_cell_width = max(len(str(rule)) for row in table for rule in row)
+    def __generateTable(self, word):
+        table = [[]]
+        # Инициализируем таблицу
+        for letter in word:
+            valid_states = []
+            for key, value in self.grammar.items():
+                if letter in value:
+                    valid_states.append(key)
+            table[0].append(valid_states)
+        for x_offset in range(2, len(word) + 1):
+            table.append([])
+            for x_position in range(len(word)):
+                # Получаем сегменты таблицы
+                collection_sets = self.__getCollectionSets(table, x_position, x_offset)
+                if collection_sets:
+                    # Получаем допустимые комбинации для сегментов
+                    table[-1].append(self.__getValidCombinations(*collection_sets))
+        return table
 
-    for row in range(1, n + 1):
-        row_str = ''
-        for col in range(row, n + 1):
-            cell_str = ' '.join(sorted(table[row][col])) if table[row][col] else '-'
-            cell_str = cell_str.ljust(max_cell_width)
-            row_str += cell_str + ' | '
+    def parseTable(self):
+        if self.parseTable is None:
+            print("Сначала необходимо вызвать метод generateTable() для построения таблицы разбора.")
+            return None
 
-        print(row_str[:-3])  # Исключаем последний разделитель '|'
+        word_length = len(self.parseTable[0])
+        parse_tree = [['-'] * word_length for _ in range(word_length)]
 
 
-# Пример грамматики
+    def checkWord(self, word):
+        # Проверяем, содержится ли стартовое состояние в последней ячейке таблицы
+        return self.startstate in self.__generateTable(word)[-1][-1]
+
+    def outputTable(self, word):
+        table = self.__generateTable(word)
+        # Создаем красивую таблицу для вывода
+        pretty_table = [
+            [
+                ",".join(sorted(y)) if y != [] else "-" for y in x
+            ] for x in table
+        ]
+        # Выводим таблицу
+        print(tabulate(pretty_table, list(word), tablefmt="grid"))
+
+
+# Задаем стартовое состояние и грамматику
+startstate = "S"
+
 grammar = {
     'S': {'FN'},
     'N': {'GC'},
@@ -48,11 +98,12 @@ grammar = {
     'C': {'c'}
 }
 
-# Пример строки
-string = '+a' + 'b' * 4 + 'c' * 4
+cyk = CYK(grammar, startstate)
 
-# Построение таблицы разбора
-table = cyk_parse(grammar, string)
+word = '+a' + 'b' * 4 + 'c'
 
-# Вывод таблицы разбора с выравниванием
-print_table(table)
+# Выводим таблицу для слова
+cyk.outputTable(word)
+
+# Проверяем слово на принадлежность грамматике
+print(cyk.checkWord(word))
