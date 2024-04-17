@@ -16,9 +16,6 @@ try {
     // Идентификатор таблицы
     $spreadsheetId = '1jnexgBDAHJq3gzLwzfbyHRkSLQa2EyOMPogOjvwYk9M';
 
-    // Определение диапазона для записи
-    $range = 'Sheet1!A:D';
-
     // Получаем данные с доски объявлений
     if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $email = $_POST["email"] ?? '';
@@ -28,9 +25,13 @@ try {
 
         // Данные для записи
         $values = [
-            [$email, $categories, $title, $description]
+            [$email, $title, $description]
         ];
     }
+
+    // Определение диапазона для записи
+    $sheetName = "$categories!A:D";
+    $range = $sheetName;
 
     // Записываем данные в таблицу
     $body = new Google_Service_Sheets_ValueRange([
