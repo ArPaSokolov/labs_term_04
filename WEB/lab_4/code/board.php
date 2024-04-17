@@ -36,8 +36,8 @@
         <tr>
             <th>Email</th>
             <th>Title</th>
-            <th>Category</th>
             <th>Description</th>
+            <th>Category</th>
         </tr>
         </thead>
         <tbody>
@@ -57,29 +57,37 @@
             // Идентификатор таблицы
             $spreadsheetId = '1jnexgBDAHJq3gzLwzfbyHRkSLQa2EyOMPogOjvwYk9M';
 
-            // Определение диапазона для записи
-            $range = 'Sheet1!A:D';
-
-            $service = new Google_Service_Sheets($client);
-            $response = $service->spreadsheets_values->get($spreadsheetId, $range);
-            $values = $response->getValues();
+            // Получение информации о листах в таблице
+            $spreadsheet = $service->spreadsheets->get($spreadsheetId);
+            $sheets = $spreadsheet->getSheets();
 
             // Отображение данных в виде таблицы
-            if (!empty($values)) {
-                $isFirstRow = true; // Флаг для определения первой строки
-                foreach ($values as $row) {
-                    if ($isFirstRow) {
-                        $isFirstRow = false;
-                        continue; // Пропускаем первую строку
+            foreach ($sheets as $sheet) {
+                $sheetTitle = $sheet->getProperties()->getTitle();
+                $range = $sheetTitle . '!A:D'; // Определение диапазона для чтения данных
+
+                $response = $service->spreadsheets_values->get($spreadsheetId, $range);
+                $values = $response->getValues();
+
+                // Отображение данных текущего листа
+                //echo '<h2>' . htmlspecialchars($sheetTitle) . '</h2>';
+                if (!empty($values)) {
+                    $isFirstRow = true; // Флаг для определения первой строки
+                    foreach ($values as $row) {
+                        if ($isFirstRow) {
+                            $isFirstRow = false;
+                            continue; // Пропускаем первую строку
+                        }
+                        echo '<tr>';
+                        foreach ($row as $cell) {
+                                echo '<td>' . htmlspecialchars($cell) . '</td>';
+                        }
+                        echo '<td>' . $sheetTitle . '</td>';
+                        echo '</tr>';
                     }
-                    echo '<tr>';
-                    foreach ($row as $cell) {
-                        echo '<td>' . htmlspecialchars($cell) . '</td>';
-                    }
-                    echo '</tr>';
+                } else {
+                    echo 'No data available.';
                 }
-            } else {
-                echo 'No data available.';
             }
             ?>
         </tbody>
