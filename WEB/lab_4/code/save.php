@@ -16,27 +16,38 @@ try {
     // Идентификатор таблицы
     $spreadsheetId = '1jnexgBDAHJq3gzLwzfbyHRkSLQa2EyOMPogOjvwYk9M';
 
-    // Указываем диапазон ячеек (в данном случае, первая ячейка A1)
-    $range = 'Sheet1!A1';
+    // Определение диапазона для записи
+    $range = 'Sheet1!A:D';
 
-    // Создаем тело запроса для записи значения "OK"
-    $body = new Google\Service\Sheets\ValueRange([
-        'values' => [['OK']]
+    // Получаем данные с доски объявлений
+    if ($_SERVER["REQUEST_METHOD"] === "POST") {
+        $email = $_POST["email"] ?? '';
+        $categories = $_POST["categories"] ?? '';
+        $title = $_POST["title"] ?? '';
+        $description = $_POST['text'] ?? '';
+
+        // Данные для записи
+        $values = [
+            [$email, $categories, $title, $description]
+        ];
+    }
+
+    // Записываем данные в таблицу
+    $body = new Google_Service_Sheets_ValueRange([
+        'values' => $values
     ]);
-
-    // Устанавливаем параметры записи (здесь можно указать дополнительные настройки)
     $params = [
         'valueInputOption' => 'RAW'
     ];
 
     // Выполняем запись данных
-    $result = $service->spreadsheets_values->update($spreadsheetId, $range, $body, $params);
+    $result = $service->spreadsheets_values->append($spreadsheetId, $range, $body, $params);
 
 } catch (Exception $e) {
     echo $e->getMessage() . ' save.php' . $e->getLine() . ' ' . $e->getFile() . ' ' . $e->getCode();
 }
 
-// Возвращаемся на страницу с объявлениями
+// Взврат на страницу с объявлениями
 header('Location: board.php');
 exit();
 ?>
