@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Наша форма</title>
+	<link rel="icon" type="image/x-icon"
+		  href="{{ url_for('static', filename='img/favicon.png') }}">
+</head>
+<body>
+
+<h1>Добавление новой новости</h1>
+<p>Введите название, содержание и другие параметры новой новости и нажмите кнопку <b>В добрый путь!</b>.</p>
+
+<form action="/info-receiver" method="post" enctype="multipart/form-data">
+	<label for="text-1">Название новости:</label> <input type="text" id="text-1" name="story-title" required>
+
+	<br><br>
+
+	<label for="textarea-1">Содержание новости:</label> <br>
+	<textarea id="textarea-1" name="story-content"></textarea>
+
+	<br><br>
+
+	<label for="select-1">Автор новости:</label>
+	<select id="select-1" name="story-author">
+		{% for user in users %}
+		<option value="{{ user.id }}">{{ user.first_name + ' ' + user.last_name }} ({{ user.username }})</option>
+		{% endfor %}
+	</select>
+	
+	<br><br>
+
+	<fieldset>
+		<legend>Степень доступности</legend>
+		<input type="radio" id="radio-1" name="scope" value="public" checked> <label for="radio-1">Доступна всем</label> <br>
+		<input type="radio" id="radio-2" name="scope" value="private"> <label for="radio-2">Доступна только для подписчиков (обычных и премиум)</label> <br>
+		<input type="radio" id="radio-3" name="scope" value="super-private"> <label for="radio-3">Доступна только для премиум-подписчиков</label> <br>
+	</fieldset>
+
+	<br>
+	
+	<label for="date-1">Дата публикации новости:</label> <input type="date" id="date-1" name="creation-date">
+	<script>
+		function toDateInputValue(dateObject){
+    		const local = new Date(dateObject);
+    		local.setMinutes(dateObject.getMinutes() - dateObject.getTimezoneOffset());
+    		return local.toJSON().slice(0,10);
+		};
+		document.getElementById('date-1').value = toDateInputValue(new Date())
+	</script>
+
+	<br><br>
+
+	<fieldset>
+		<legend>Тематика</legend>
+		{% for category in categories %}
+		<input type="checkbox" name="story-topics" value="{{ category.id }}">{{ category.name }}<br>
+        {% endfor %}
+	</fieldset>
+
+	<br><br>
+
+	<label for="number-1">Уровень важности (от 1 до 5):</label> <input id="number-1" type="number" name="severity" min="1" max="5" value="3">
+
+	<br><br>
+
+	<input type="checkbox" id="checkbox-1" name="responsibility" value="1">
+	<label for="checkbox-1">Я понимаю, что вполне могу получить по шапке, если напишу что-нибудь оскорбительное.</label> <br>
+
+	<br>
+
+	<input type="submit" value="В добрый путь!"> <input type="reset" value="Очистить форму">
+</form>
+
+{% for error in errors %}
+	<p style="color: red;">{{ error }}</p>
+{% endfor %}
+</body>
+</html>
