@@ -39,8 +39,8 @@ class FilmsTable(QWidget):
                         (id INTEGER, title TEXT, year INTEGER, genre TEXT, duration INTEGER)")
 
         # получаем данные
-        cursor.execute("SELECT * FROM films")
-        films = cursor.fetchall()
+        res = cursor.execute("SELECT * FROM films")
+        films = res.fetchall()
 
         # запись в таблицу
         self.filmsTable.setRowCount(len(films))
@@ -89,21 +89,20 @@ class FilmsTable(QWidget):
 
     def add_film(self):
         editor = FilmsEditor()
-        if editor.exec_() == QDialog.Accepted:
+        if editor.exec() == QDialog.Accepted:
             title = editor.titleEdit.text()
             year = int(editor.yearEdit.text())
-            genre = editor.genre_edit.text()
+            genre = editor.genreEdit.text()
             duration = int(editor.durationEdit.text())
 
             connection = sqlite3.connect("films_db.sqlite")
             curs = connection.cursor()
-            curs.execute("SELECT MAX(id) FROM films")
-            max_id = curs.fetchone()[0]
-            new_id = max_id + 1 if max_id is not None else 1
+            # curs.execute("SELECT MAX(id) FROM films")
+            print("!")
 
             # Определите SQL-запрос с использованием параметров для добавления новой строки в таблицу
-            query_string = "INSERT INTO films (id, title, year, genre, duration) VALUES (?, ?, ?, ?, ?)"
-            curs.execute(query_string, (new_id, title, year, genre, duration))
+            query_string = "INSERT INTO films (title, year, genre, duration) VALUES (?, ?, ?, ?)"
+            curs.execute(query_string, (title, year, genre, duration))
 
             # Сохраните изменения в базе данных
             connection.commit()
@@ -111,7 +110,7 @@ class FilmsTable(QWidget):
 
             # Загрузите обновленные данные из базы данных
             self.load_films()
-            self.close()
+            # self.close()
 
     def delete_film(self):
         selected_rows = [index.row() for index in self.filmsTable.selectedIndexes()]

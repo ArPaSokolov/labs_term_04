@@ -100,7 +100,7 @@ grammar = {
 
 cyk = CYK(grammar, startstate)
 
-word = '+a' + 'b' * 4 + 'c'
+word = '+a' + 'bb' + 'cc'
 
 # Выводим таблицу для слова
 cyk.outputTable(word)

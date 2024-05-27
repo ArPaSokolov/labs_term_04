@@ -1,85 +1,85 @@
-# Функция для проверки, является ли граф эйлеровым
-def count(graph):
-    # Подсчитываем количество вершин с нечетной степенью
-    odd = 0
-    for row in graph:
-        degree = sum(row)
-        if degree % 2 == 1:
-            odd += 1
-    # Граф эйлеров, если все вершины имеют четную степень
-    return odd == 0
+# проверка на эйлеров граф
+def is_eulerian_cycle(matrix):
+    n = len(matrix)  # количество вершин
+    for i in range(n):
+        degree = sum(matrix[i][j] != 0 for j in range(n))  # количество исходящих ребер
+        if degree % 2 != 0:  # сли степень нечетная
+            return False  # не имеет цикла Эйлера
 
-# Функция для проверки, является ли ребро мостом в графе
-def is_bridge(graph, u, v):
-    # Копируем граф
-    graph_copy = [row[:] for row in graph]
-    # Удаляем ребро из копии графа
-    graph_copy[u][v] = 0
-    graph_copy[v][u] = 0
-    # Проверяем, связен ли граф после удаления ребра
-    visited = [False] * len(graph)
-    dfs(graph_copy, u, visited)
-    return not visited[v]
+    visited = [False] * n  # массив посещенных вершин
+    dfs(matrix, 0, visited)  # проверка связности графа
+    if all(visited):  # все вершины были посещены
+        return True
+    else:
+        return False  # граф не связный
 
-# Функция для обхода графа в глубину
-def dfs(graph, v, visited):
-    # Помечаем вершину как посещенную
-    visited[v] = True
-    # Перебираем соседние вершины
-    for u in range(len(graph)):
-        if graph[v][u] == 1 and not visited[u]:
-            # Удаляем ребро из графа
-            graph[v][u] = 0
-            graph[u][v] = 0
-            # Рекурсивно обходим соседнюю вершину
-            dfs(graph, u, visited)
 
-# Функция для нахождения эйлерова цикла в графе
-def find_eulerian_cycle(graph):
-    # Проверяем, является ли граф эйлеровым
-    if not count(graph):
+def dfs(matrix, vertex, visited):
+    visited[vertex] = True
+    for i in range(len(matrix)):
+        if matrix[vertex][i] != 0 and not visited[i]:
+            dfs(matrix, i, visited)
+
+
+def find_eulerian_cycle(matrix):
+    if not is_eulerian_cycle(matrix):  # существует ли цикл Эйлера
         return None
-    # Количество вершин в графе
-    n = len(graph)
-    # Стек для хранения текущего пути
-    stack = []
-    # Список для хранения эйлерова цикла
-    cycle = []
-    # Начинаем с произвольной вершины (например, с нулевой)
-    stack.append(0)
-    # Пока стек не пуст
-    while stack:
-        # Берем вершину из стека
-        v = stack[-1]
-        # Пока есть непосещенные ребра из этой вершины
-        found = False
-        for u in range(n):
-            if graph[v][u] == 1:
-                if not is_bridge(graph, v, u):
-                    found = True
-                    break
-        if found:
-            # Удаляем ребро из графа и добавляем новую вершину в стек
-            graph[v][u] = 0
-            graph[u][v] = 0
-            stack.append(u)
-        else:
-            # Добавляем вершину в цикл
+
+    n = len(matrix)  # количество вершин
+
+    cycle = []  # список для хранения вершин цикла
+    stack = [0]  # стек для обхода графа
+
+    while stack:  # пока стек не пуст
+        u = stack[-1]  # берем вершину с вершины стека
+        flag = False  # было найдено не пройденное ребро
+        for v in range(n):  # ищем не пройденное ребро из текущей вершины
+            if matrix[u][v] > 0:
+                stack.append(v)
+                # удаляем ребро из графа
+                matrix[u][v] -= 1
+                matrix[v][u] -= 1
+                flag = True
+                break
+        if not flag:  # если вершины нет среди не пройденных ребер, то добавляем ее в цикл и удаляем из стека
             cycle.append(stack.pop())
-    # Возвращаем цикл в обратном порядке
-    return cycle[::-1]
 
-# Пример использования
-graph = [
-    [0, 1, 1, 0, 0],
-    [1, 0, 1, 0, 0],
-    [1, 1, 0, 1, 1],
-    [0, 0, 1, 0, 1],
-    [0, 0, 1, 1, 0]
-]
+    cycle.pop()  # удаляем из стека вершину, в которую вернулись
 
-cycle = find_eulerian_cycle(graph)
-if cycle:
-    print("Эйлеров цикл:", cycle)
-else:
-    print("Граф не является эйлеровым")
+    return cycle  # возвращаем цикл Эйлера
+
+
+def read_graph():
+    with open("../graphs_examples/input.txt", 'r') as file:
+        lines = file.readlines()
+        matrix = [[int(num) for num in line.split()] for line in lines]
+    return matrix
+
+
+def write_eulerian_cycle(cycle):
+    with open("output.txt", 'w') as file:
+        if eulerian_cycle:
+            cycle_str = '->'.join(map(str, cycle))
+            file.write("Эйлеров цикл: " + cycle_str)
+        else:
+            file.write("В графе нет эйлерова цикла")
+
+matrix = read_graph()
+eulerian_cycle = find_eulerian_cycle(matrix)
+write_eulerian_cycle(eulerian_cycle)
+
+# не эйлеров
+# 0 1 1 1 0 0
+# 1 0 1 1 1 0
+# 1 1 0 1 0 1
+# 1 1 1 0 1 1
+# 0 1 0 1 0 1
+# 0 0 1 1 1 0
+
+# эйлеров
+# 0 1 1 1 1 0
+# 1 0 1 1 0 1
+# 1 1 0 1 1 0
+# 1 1 1 0 1 0
+# 1 0 1 1 0 1
+# 0 1 0 0 1 0

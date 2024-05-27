@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Вопросы</title>
+</head>
+<body>
+<h1>Любите ли Вы родителей?</h1>
+<form action="/results" method="post">
+    <fieldset>
+        <legend>Вы любите маму?</legend>
+        <input type="radio" id="mommy-1" name="mommy" value="yes">
+        <label for="mommy-1">Да</label>
+        <br>
+        <input type="radio" id="mommy-2" name="mommy" value="no" disabled>
+        <label for="mommy-2">Нет</label>
+        <br>
+        <input type="radio" id="mommy-3" name="mommy" value="notsure" disabled>
+        <label for="mommy-3">Не знаю</label>
+    </fieldset>
+    <br>
+    <fieldset>
+        <legend>Вы любите папу?</legend>
+        <input type="radio" id="daddy-1" name="daddy" value="yes">
+        <label for="daddy-1">Да</label>
+        <br>
+        <input type="radio" id="daddy-2" name="daddy" value="no" disabled>
+        <label for="daddy-2">Нет</label>
+        <br>
+        <input type="radio" id="daddy-3" name="daddy" value="notsure" disabled>
+        <label for="daddy-3">Не знаю</label>
+    </fieldset>
+    <br>
+    <input type="submit" value="Отправить">
+</form>
+</body>
+</html>

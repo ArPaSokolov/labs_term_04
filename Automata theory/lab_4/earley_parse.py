@@ -46,7 +46,7 @@ grammar = {
     'D': {('b', 'D', 'c'), ('b', 'c')}
 }
 
-input_string = '+a' + 'b' * 4 + 'c'
+input_string = '+a' + 'b' * 4 + 'c' * 4
 chart = earley_parse(grammar, input_string)
 
 # Вывод таблицы разбора по столбцам
