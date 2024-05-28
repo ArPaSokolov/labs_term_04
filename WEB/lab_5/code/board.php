@@ -1,10 +1,18 @@
 <?php
 /* Подключение к серверу MySQL */
-$mysqli = new mysqli('db', 'root', 'helloworld', 'web', "6603");
+$mysqli = new mysqli('db', 'root', 'helloworld', 'web');
 
-if (!$mysqli->query('INSERT INTO ad (email, title, description, category) VALUES("test@test.com", "title", "desc", "other")')) {
-    printf("Ошибка при выполнении запроса: %s\n", $mysqli->error);
+// Получение всех объявлений
+$ads = [];
+if ($result = $mysqli->query('SELECT * FROM ad ORDER BY created DESC')) {
+    while ($row = $result->fetch_assoc()) {
+        $ads[] = $row;
+    }
+    $result->close();
 }
+
+// Закрытие соединения
+$mysqli->close();
 ?>
 
 <!doctype html>
@@ -38,3 +46,28 @@ if (!$mysqli->query('INSERT INTO ad (email, title, description, category) VALUES
 
     <button type="submit">Post</button>
 </form>
+</form>
+<div id="table">
+    <table>
+        <thead>
+        <tr>
+            <th>Email</th>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Category</th>
+        </tr>
+        </thead>
+        <tbody>
+        <?php foreach ($ads as $ad):
+            echo "<tr>";
+                echo "<td>" . ($ad['email']) . "</td>";
+                echo "<td>" . ($ad['title']) . "</td>";
+                echo "<td>" . ($ad['description']) . "</td>";
+                echo "<td>" . ($ad['category']) . "</td>";
+            echo "</tr>";
+        endforeach; ?>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
