@@ -1,3 +1,12 @@
+<?php
+/* Подключение к серверу MySQL */
+$mysqli = new mysqli('db', 'root', 'helloworld', 'web', "6603");
+
+if (!$mysqli->query('INSERT INTO ad (email, title, description, category) VALUES("test@test.com", "title", "desc", "other")')) {
+    printf("Ошибка при выполнении запроса: %s\n", $mysqli->error);
+}
+?>
+
 <!doctype html>
 <html lang="ru">
 <head>
