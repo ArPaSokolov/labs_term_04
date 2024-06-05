@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Sent</title>
+</head>
+<body>
+  <h1>Отправленные сообщения</h1>
+  {% if messages %}
+    <ul>
+      {% for message in messages %}
+        <li>Получатель: {{ message.receiver }}</li>
+        <li>Сообщение: {{ message.content }}</li>
+        <hr>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>Вы не отправили ни одного сообщения.</p>
+  {% endif %}
+</body>
+</html>

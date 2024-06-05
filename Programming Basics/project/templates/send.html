@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Send</title>
+</head>
+<body>
+    <h1>Отправка сообщения</h1>
+    <form id="send" method="post" novalidate>
+
+        {{ form.receiver.label }} {{ form.receiver() }}
+        {% for error in form.receiver.errors %}
+        <p style="font-family: monospace; color: red; margin: 4px;">{{ error }}</p>
+        {% endfor %}
+        <br><br>
+
+        <p>
+        {{ form.content.label }}<br>
+        {{ form.content }}
+        </p>
+
+        <p>{{ form.submit() }}</p>
+    </form>
+</body>
+</html>

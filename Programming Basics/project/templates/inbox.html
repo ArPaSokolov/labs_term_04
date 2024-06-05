@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Входящие</title>
+</head>
+<body>
+<h1>Ваши сообщения</h1>
+  {% if messages %}
+    <ul>
+      {% for message in messages %}
+        <li>Отправитель: {{ message.sender }}</li>
+        <li>Сообщение: {{ message.content }}</li>
+        <hr>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>У вас нет сообщений.</p>
+  {% endif %}
+
+</body>
+</html>
