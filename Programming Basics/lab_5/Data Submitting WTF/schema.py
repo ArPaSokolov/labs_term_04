@@ -19,9 +19,10 @@ class Basis(DeclarativeBase):
 class User(Basis):
     __tablename__ = "users"
     id = Column(Integer(), primary_key=True, autoincrement=True)
+    username = Column(String(50), nullable=False, unique=True, index=True)
+    password = Column(String(50), nullable=False)
     first_name = Column(String(100), nullable=False)
     last_name = Column(String(100), nullable=False)
-    username = Column(String(50), nullable=False, unique=True, index=True)
     created_on = Column(DateTime(), default=dt.datetime.now)
     updated_on = Column(DateTime(), default=dt.datetime.now, onupdate=dt.datetime.now)
     

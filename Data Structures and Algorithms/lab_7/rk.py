@@ -1,38 +1,44 @@
-# Функция для вычисления хеша подстроки длины m
-def hash(s, m):
-  h = 0
-  p = 31 # Простое число
-  q = 10**9 + 9 # Большое простое число
-  for i in range(m):
-    h = (h * p + ord(s[i])) % q # Вычисляем хеш по формуле
-  return h
+# Глобальные переменные
+prime_number = 13
+large_prime = 256
 
-# Функция для поиска всех подстрок t в строке s с помощью алгоритма Рабина-Карпа
-def rabin_karp_all(s, t):
-  n = len(s) # Длина строки
-  m = len(t) # Длина подстроки
-  if m > n: # Если подстрока длиннее строки, то нет совпадений
-    return []
-  p = 31 # Простое число
-  q = 10**9 + 9 # Большое простое число
-  t_hash = hash(t, m) # Хеш подстроки
-  s_hash = hash(s[:m], m) # Хеш первой подстроки строки длины m
-  pm = pow(p, m-1, q) # Степень p по модулю q
-  result = [] # Список для хранения индексов начала подстрок в строке
-  for i in range(n-m+1): # Перебираем все возможные позиции подстроки в строке
-    if t_hash == s_hash: # Если хеши совпадают, то проверяем на равенство подстроки
-      if s[i:i+m] == t: # Если подстроки равны, то добавляем индекс начала подстроки в список
-        result.append(i)
-    if i < n-m: # Если не дошли до конца строки, то обновляем хеш следующей подстроки строки длины m
-      s_hash = (s_hash - ord(s[i]) * pm) * p + ord(s[i+m]) % q # Вычитаем старший символ и добавляем младший по формуле
 
-  return result # Возвращаем список индексов начала подстрок в строке
+# вычисление хеша подстроки длины m
+def calculate_hash(substring, length):
+    hash_value = 0
+    for i in range(length):
+        hash_value = (hash_value * prime_number + ord(substring[i])) % large_prime
+    return hash_value
 
-# Пример использования функции rabin_karp_all
-with open('input.txt', 'r') as f:
-  s = f.readline()
-t = "^_^" # Подстрока
-indexes = rabin_karp_all(s, t) # Список индексов начала подстрок в строке или пустой список, если нет совпадений
-print(indexes) # Выводим результат на экран
 
-# O(mn), m - длина подстроки, n - длина строки
+# поиск всех подстрок pattern в строке text с помощью алгоритма Рабина-Карпа
+def rabin_karp_all(text, pattern):
+    text_length = len(text)
+    pattern_length = len(pattern)
+
+    # текст короче образа
+    if pattern_length > text_length:
+        return []
+
+    pattern_hash = calculate_hash(pattern, pattern_length)
+    text_hash = calculate_hash(text[:pattern_length], pattern_length)
+    prime_power = prime_number ** (pattern_length - 1) % large_prime
+
+    indexes = []
+    # идем по всем подстрокам длины образа
+    for i in range(text_length - pattern_length + 1):
+        # проверка на совпадение хэша и подстроки
+        if pattern_hash == text_hash and text[i:i+pattern_length] == pattern:
+            indexes.append(i)
+        # обновление хэша для следующей подстроки
+        if i < text_length - pattern_length:
+            text_hash = ((text_hash - ord(text[i]) * prime_power) * prime_number + ord(text[i+pattern_length])) % large_prime
+
+    return indexes
+
+
+# пример
+text = "Practicing your comprehension of written English will both improve your vocabulary and understanding of grammar and word order."
+pattern = "your"
+indexes = rabin_karp_all(text, pattern)
+print(indexes)

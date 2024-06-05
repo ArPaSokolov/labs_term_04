@@ -4,87 +4,97 @@ import uuid
 app = Flask(__name__)
 
 # ответы
-answers = {
-    "optimist": 0,
-    "pessimist": 0
-}
+answers = {}  # глобальная переменная
 
 
 # главная
 @app.route("/", methods=['GET', 'POST'])
 @app.route("/index", methods=['GET', 'POST'])
 def index():
-    user_id = request.cookies.get('user_id')
-    if not user_id:
-        user_id = str(uuid.uuid4())
+    user_id = request.cookies.get('user_id')  # получаем куки с айди пользователя
+
+    if not user_id:  # новый пользователь
+        user_id = str(uuid.uuid4())  # генерируем айди
+        answers[user_id] = {
+            "optimist": 0,
+            "pessimist": 0
+        }
         response = make_response(render_template('index.html'))
-        response.set_cookie('user_id', user_id)
+        response.set_cookie('user_id', user_id)  # генерируем куки
         return response
-    else:
-        return f"Вы уже проходили этот тест! Вы - {request.cookies.get('result')}"
+
+    else:  # пользователь имеет куки
+        response = make_response(redirect(url_for('results')))
+        return response
 
 
-# вопрос 1
-@app.route('/question1', methods=['GET', 'POST'])
-def question1():
+# вопросы
+@app.route('/questions', methods=['GET', 'POST'])
+def questions():
+
+    user_id = request.cookies.get('user_id')
+    result = request.cookies.get('result')
+    if user_id and result:  # пользователь уже проходил тест
+        response = make_response(redirect(url_for('results')))
+        return response
+
     if request.method == 'POST':
-        if "glass" in request.form:
+
+        answers[user_id] = {  # обновляем результаты
+            "optimist": 0,
+            "pessimist": 0
+        }
+
+        if "glass" in request.form:  # вопрос 1
             if request.form["glass"] == "full":
-                answers["optimist"] += 1
+                answers[user_id]["optimist"] += 1
             elif request.form["glass"] == "empty":
-                answers["pessimist"] += 1
-        response = make_response(redirect(url_for('question2')))
-        return response
+                answers[user_id]["pessimist"] += 1
 
-    if request.method == "GET":
-        return render_template('question1.html')
-
-
-# вопрос 2
-@app.route('/question2', methods=['GET', 'POST'])
-def question2():
-    if request.method == 'POST':
-        if "fear" in request.form:
+        if "fear" in request.form:  # вопрос 2
             if request.form["fear"] == "yes":
-                answers["pessimist"] += 1
+                answers[user_id]["pessimist"] += 1
             elif request.form["fear"] == "no":
-                answers["optimist"] += 1
-        response = make_response(redirect(url_for('question3')))
+                answers[user_id]["optimist"] += 1
+
+        if "truth" in request.form:  # вопрос 3
+            if request.form["truth"] == "yes":
+                answers[user_id]["optimist"] += 1
+            elif request.form["truth"] == "no":
+                answers[user_id]["pessimist"] += 1
+
+        response = make_response(redirect(url_for('results')))
         return response
 
     if request.method == "GET":
-        return render_template('question2.html')
-
-
-# вопрос 3
-@app.route('/question3', methods=['GET', 'POST'])
-def question3():
-    if request.method == 'POST':
-        if "fear" in request.form:
-            if request.form["sense"] == "yes":
-                answers["optimist"] += 1
-            elif request.form["fear"] == "no":
-                answers["pessimist"] += 1
-        response = make_response(redirect(url_for('result')))
-        return response
-
-    if request.method == "GET":
-        return render_template('question3.html')
+        return render_template('questions.html')
 
 
 # результаты
-@app.route('/answers', methods=["GET", "POST"])
-def result():
+@app.route('/results', methods=["GET", "POST"])
+def results():
     if request.method == "GET":
-        if answers["optimist"] > answers["pessimist"]:
-            answer = "оптимист"
+        user_id = request.cookies.get('user_id')
+        if not request.cookies.get('result'):
+            if answers[user_id]["optimist"] > answers[user_id]["pessimist"]:  # пользователь больше оптимист, чем пессимист
+                result = "оптимист"
+            else:
+                result = "пессимист"
         else:
-            answer = "пессимист"
+            result = request.cookies.get('result')
 
-        response = make_response(render_template('answers.html', result=answer))
-        response.set_cookie('result', str(answer))
+        response = make_response(render_template('results.html', result=result))
+        response.set_cookie("result", result)
+        return response
+
+    if request.method == "POST":
+        # Перенаправляем пользователя обратно на страницу вопросов со сюрошенным результатом
+        response = make_response(redirect(url_for('questions')))
+        response.delete_cookie("result")
         return response
 
 
 if __name__ == "__main__":
     app.run(host="127.0.0.1", port=4321)
+
+# browser://settings/siteData

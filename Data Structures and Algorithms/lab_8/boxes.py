@@ -1,46 +1,34 @@
-def firstFit(weight, n, c):
-    # Инициализация результата (количество бинов)
+def first_fit(weights, capacity):
+    # минимальное необходимых количество корзин
     res = 0
 
-    # Создайте массив для хранения
-    # оставшееся пространство в бункерах
-    # может быть не более n бинов
-    bin_rem = [0] * n
+    # массив для хранения оставшегося места в корзинах
+    bin_rem = [0]
 
-    # Поместите элементы один за другим
-    for i in range(n):
+    # идем по весам предметов
+    for weight in weights:
+        min_remainder = capacity + 1  # минимальная вместимость
+        best_bin = 0
 
-        # Найдите первую корзину, которая
-        # может вместить
-        # вес[i]
-        j = 0
-
-        # Инициализация минимального пространства
-        # слева и индекс
-        # наилучшего бина
-        min = c + 1
-        bi = 0
-
+        # идем по имеющимся корзинам
         for j in range(res):
-            if (bin_rem[j] >= weight[i] and bin_rem[j] -
-                    weight[i] < min):
-                bi = j
-                min = bin_rem[j] - weight[i]
+            # место нашлось и оно наименьшее
+            if bin_rem[j] >= weight and bin_rem[j] - weight < min_remainder:
+                best_bin = j  # запоминаем номер корзины
+                min_remainder = bin_rem[j] - weight  # запоминаем вес
 
-        # Если ни одна корзина не может вместить вес[i],
-        # создайте новую корзину
-        if (min == c + 1):
-            bin_rem[res] = c - weight[i]
+        # ни одна корзина не может вместить предмет, создаем новую корзину
+        if min_remainder == capacity + 1:
+            bin_rem.append(capacity - weight)
             res += 1
-        else:  # Присвоить предмету лучшую корзину
-            bin_rem[bi] -= weight[i]
+        else:
+            # кладем предмет в лучшую корзину
+            bin_rem[best_bin] -= weight
+
     return res
 
 
 if __name__ == '__main__':
-    weight = [4, 4, 6, 6, 1, 8, 9, 1, 4, 2, 1]
-    c = 10;
-    n = len(weight);
-    print("Количество необходимых ящиков: ",
-          firstFit(weight, n, c));
-
+    weights = [4, 4, 6, 6, 1, 8, 9, 1, 4, 2, 1]
+    capacity = 10
+    print(f"Минимальное количество необходимых корзин: {first_fit(weights, capacity)}")

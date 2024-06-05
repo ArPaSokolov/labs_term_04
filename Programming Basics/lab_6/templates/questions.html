@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Questions</title>
+</head>
+<body>
+<form method="post">
+    <h1>Тест на оптимиста</h1>
+    <fieldset>
+        <legend>Что вы видите на картинке? Стакан наполовину...</legend>
+        <img src="{{ url_for('static', filename='glass.jpg') }}" alt="Стакан" width="200" height="200"><br>
+        <input type="radio" name="glass" value="full" required>полный<br>
+        <input type="radio" name="glass" value="empty">пустой<br>
+    </fieldset><br>
+
+    <fieldset>
+        <legend>Когда вы ложитесь спать, вас не оставляют мысли о грабителях, ураганах и других катастрофах.</legend>
+        <img src="{{ url_for('static', filename='sleep.png') }}" alt="Мысли перед сном" width="200" height="200"><br>
+        <input type="radio" name="fear" value="yes" required>Да, это про меня<br>
+        <input type="radio" name="fear" value="no">Нет, такого не бывает<br>
+    </fieldset><br>
+
+    <fieldset>
+        <legend>Вы оптимист?</legend>
+        <img src="{{ url_for('static', filename='truth.png') }}" alt="Только честно" width="200" height="200"><br>
+        <input type="radio" name="truth" value="yes" required>Да<br>
+        <input type="radio" name="truth" value="no">Нет<br>
+    </fieldset><br>
+    <button type="submit">Далее</button>
+    </form>
+</body>
+</html>

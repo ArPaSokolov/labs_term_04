@@ -1,9 +1,10 @@
 from wtforms import Form
 from wtforms import StringField, IntegerField, BooleanField, TextAreaField, RadioField, \
-    SelectField, SelectMultipleField, DateField
+    SelectField, SelectMultipleField, DateField, PasswordField, validators, SubmitField
 
-from wtforms.validators import InputRequired, NumberRange
+from wtforms.validators import InputRequired, NumberRange, DataRequired
 from wtforms.widgets import ListWidget, CheckboxInput
+from flask_wtf import FlaskForm
 
 
 class StoryForm(Form):
@@ -50,6 +51,61 @@ class StoryForm(Form):
     responsibility = BooleanField(
         label="Я понимаю, что вполне могу получить по шапке, если напишу что-нибудь оскорбительное.",
         validators=[
-            InputRequired(message="Вы не указали, готовы ли взять на себя ответственность за публикацию новостей спорного характера.")
+            InputRequired(message="Вы не указали, готовы ли взять на себя ответственность за \
+                                    публикацию новостей спорного характера.")
         ]
     )
+
+
+class LoginForm(FlaskForm):
+    first_name = StringField(
+        "Имя",
+        validators=[InputRequired(message="Вы не указали имя.")]
+    )
+    last_name = StringField(
+        "Фамилия",
+        validators=[InputRequired(message="Вы не указали фамилию.")]
+    )
+    username = StringField(
+        "Логин",
+        validators=[InputRequired(message="Вы не указали логин.")]
+    )
+    password = PasswordField(
+        "Пароль",
+        validators=[
+            InputRequired(message="Вы не указали пароль."),
+            validators.EqualTo('confirm_password', message='Пароли не совпадают')
+        ]
+    )
+    confirm_password = PasswordField(
+        "Подтвердить пароль",
+        validators=[InputRequired(message="Вы не указали пароль.")]
+    )
+
+    submit = SubmitField("Зарегистрироваться")
+
+
+class UpdateForm(FlaskForm):
+
+    profile = SelectField(label="Профиль:", name="profile", coerce=int)
+
+    first_name = StringField(
+        "Имя"
+    )
+    last_name = StringField(
+        "Фамилия"
+    )
+    username = StringField(
+        "Логин"
+    )
+    password = PasswordField(
+        "Пароль",
+        validators=[
+            validators.EqualTo('confirm_password', message='Пароли не совпадают')
+        ]
+    )
+    confirm_password = PasswordField(
+        "Подтвердить пароль"
+    )
+
+    submit = SubmitField('Изменить')
